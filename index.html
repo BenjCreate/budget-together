@@ -3,15 +3,66 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Budget Together</title>
+<link rel="icon" type="image/png" sizes="64x64" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAP+SURBVHhe7Vs9aBRBFE5paRnMLmeZUrCxi6UEM2OldjlEZ2MKDRYSUOSaIBZqJWqjhcWVsTvQIo0QsLlOC0ErEStLy5Nv3A27b2b29+3ubMgHX3M7OzPvzby/mb2lpROcoBesbG1cWInkxTRpm2OBUSTPhkruhJGchZGYh5FcFDGI5NdQiYNQid2RurxK+/QeZ27Kc2EkJ1oQi4BViX6CSDzHrqFjeQVs47KrXJeBEj8CJa/QsXtFvOIzOtlWqeRh735jtL2+HCjx1phct5z14iew6oGSvywT6pxBJP92ahbBLXEdg9KJ9E4ldulc2QHvbgzsF6ejzbVTdN4s8MDey1HJQ3YlBJF8bAzkNcU+laE2YPPmAIPghMpSGci+vHR4JdkoOiCP9yXU1SUWr3aeADuiHQ6TYk5lK0Sc3lo6GyYrm0LnuX3rFPPSoRHaMjuozrVHtxez+WEhH05fL64+fWC8z04ld6isVnCVtOt79xZV8P33z1YVAYdeuAv+1/Tmy3VYVQEJsCNoX4wcU5kz4Mz46ioAaHEnTKnMGeDExfJSLboUcPfNM/3syft39NERYA60Pw7qvMBlBkgY6AtN6FIAfk/aYKVduPFiz+iTg4HauERl1+AqdTFxePfP375QmTTwezoKuIBdkLThVAaqWiq7BspI2rgO4cS4wekYEQ2o7Bpcef/5+2O9zWHrNiQ+IM1XH/ZpM43kOfqk4zSh1Q/QRnVZ1QTyzKANEwBR6GWE1zc4loZ16LsJgMaROup+2qguq5hAXhTAs7ZMAIc8GQVw5f9plgmDrt2CbU/7YyWtC0IltoxGDVmkANdzIK2klpg9Lmvj3M8lIJygy0ECiAi0L3bSOwTOIiihSwF5gGJW71wz+mqB2aKIMwokrKqA6aePXQlvRgEkBrRRU5ZVAATvwOYztB6UBpH4Qxs2oUsB6TBI3+mKo015msqPswCWLzoSuhTQp+AgSmIquwY+Q6GNm9BXBTivzbgjgb8KyDkW4/QDvirAav8JOK/AvVSAEgdU5gw4awLE9MTbp9lVrLeS1gAUyAe4DkZ8oz4Q3V5fpjIbiL/sNDoYOhHlqKxWHMddAOdeavUTcPoCL1hk+zZw3RH2zVJ3gjZwJ0Y90p34FGHoDrG048tDEMmXtONBsCjpKQt9VoA/MNABPCYueXNT3qpAZ5w3x21ShzzbgUdTII5y3R+2RSwSPvCic2eDTpJ89QlKHLBu+zz4Fh2wKHSOrQN5Qt9+IU7Z68d5DmA3dF07xAc3k862fBEwkfivcq1/WI3kplJh0yXiSLHDnzeIuf4jJb3X9xlaGZEc4xS25s6Y4dLW29WuCphJ8j9hrGb8UdYRk2fHRuAh4B+/N62dXpsSsgAAAABJRU5ErkJggg==">
 <style>
-*{box-sizing:border-box}body{margin:0;background:#f0f3fa;color:#18233b;font:16px system-ui,sans-serif}main{max-width:900px;margin:auto;padding:24px 18px 48px}header,.row{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}h1{font-size:1.6rem;margin:0}h2{font-size:1.15rem;margin:0 0 14px}p{line-height:1.5}section{background:white;border:1px solid #dce3f0;border-radius:18px;padding:20px;margin-top:16px}.hero{background:#202e58;color:white}.balance{display:block;font-size:clamp(2.3rem,8vw,4rem);font-weight:750;margin:8px 0}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px}.grid strong{display:block;margin-top:3px}.controls{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:12px;margin-bottom:12px}label{display:grid;gap:5px}input,select,button{font:inherit;border-radius:9px;padding:9px 11px;min-height:42px}input,select{width:100%;border:1px solid #a9b5ca;background:white;color:inherit}button{border:0;background:#3d4fb2;color:white;cursor:pointer}button.secondary{background:#e9edfb;color:#253570}button:disabled{opacity:.6;cursor:wait}footer,#status{color:#43516c}ul{padding:0;list-style:none}li{padding:10px 0;border-bottom:1px solid #e3e8f0}li small{display:block;color:#43516c}[hidden]{display:none!important}
-#dashboard{display:grid;grid-template-columns:190px minmax(0,1fr);gap:20px;align-items:start;margin-top:16px}.sidebar{position:sticky;top:16px;background:white;border:1px solid #dce3f0;border-radius:18px;padding:10px;display:grid;gap:4px}.sidebar a{display:block;padding:10px 12px;color:#32416b;text-decoration:none;border-radius:9px;font-size:.9375rem}.sidebar a:hover,.sidebar a:focus-visible{background:#e9edfb}.sidebar a[aria-current="page"]{background:#27386a;color:white;font-weight:650}.views{min-width:0}.views section{margin-top:0}@media(max-width:600px){#dashboard{grid-template-columns:1fr;gap:12px}.sidebar{top:0;z-index:1;grid-template-columns:repeat(2,minmax(0,1fr));padding:6px}.sidebar a{padding:8px 10px}}
+:root{color-scheme:light;--ink:#172a27;--muted:#50645f;--line:#dce6e1;--accent:#1d674f;--soft:#e6f1eb;--surface:#fff}
+*{box-sizing:border-box}
+body{margin:0;background:#f4f7f5;color:var(--ink);font:1rem/1.5 system-ui,sans-serif}
+main{max-width:1200px;margin:auto;padding:0 28px 48px}
+.topbar,.row,.panel-head,.hero{display:flex;align-items:center;justify-content:space-between;gap:16px}
+.topbar{min-height:86px;border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:12px}
+.mark{display:grid;place-items:center;width:39px;height:39px;border-radius:12px;background:var(--accent);color:white;font-weight:750}
+h1,h2,p{margin:0}
+h1{font-size:1.2rem;letter-spacing:-.03em}
+h2{font-size:1.75rem;letter-spacing:-.045em;line-height:1.2}
+#status{margin-top:16px;padding:10px 14px;border:1px solid var(--line);border-radius:12px;background:var(--surface);color:var(--muted);overflow-wrap:anywhere}
+#dashboard{display:grid;grid-template-columns:208px minmax(0,1fr);align-items:start;gap:28px;margin-top:28px}
+.sidebar{position:sticky;top:20px;display:grid;gap:5px;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:8px}
+.sidebar a{display:flex;align-items:center;min-height:44px;padding:8px 12px;border-radius:9px;color:var(--muted);font-size:.9375rem;font-weight:600;text-decoration:none}
+.sidebar a:hover,.sidebar a[aria-current="page"]{background:var(--soft);color:#14553e}
+.views{min-width:0}
+.panel-head{margin-bottom:18px;flex-wrap:wrap}.history-actions{display:flex;gap:8px;flex-wrap:wrap}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:24px}
+.hero{align-items:flex-end;flex-wrap:wrap;background:linear-gradient(120deg,#112f28,#1a4b3c);border-radius:18px;padding:clamp(20px,4vw,34px);color:#fff}
+.hero-label{color:#c7e4d9;font-weight:600}
+.balance{display:block;margin-top:8px;font-size:clamp(1.9rem,5.5vw,4rem);font-weight:700;letter-spacing:-.055em;line-height:1.12;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.hero > div{min-width:0;max-width:100%}
+.grid,.controls{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.grid{margin-top:14px}
+.grid > div{padding:16px;background:var(--surface);border:1px solid var(--line);border-radius:14px;color:var(--muted);font-size:.875rem}
+.grid strong{display:block;color:var(--ink);font-size:clamp(1rem,2vw,1.4rem);margin-top:6px;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.controls{grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-bottom:20px}
+label{display:grid;gap:6px;min-width:0;font-size:.875rem;font-weight:650}
+input,select,button,.button{min-height:44px;border-radius:9px;padding:9px 12px;font:inherit}
+input,select{width:100%;min-width:0;border:1px solid #aebfb6;background:white;color:var(--ink);font-size:1rem}
+select{appearance:none;padding-right:32px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3E%3Cpath d='m4 6 4 4 4-4' fill='none' stroke='%2350645f' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-position:right 10px center;background-repeat:no-repeat}
+button,.button{display:inline-flex;align-items:center;justify-content:center;border:1px solid transparent;background:var(--accent);color:white;font-size:.875rem;font-weight:650;cursor:pointer;text-decoration:none}
+button:hover,.button:hover{background:#16513e}
+button.secondary{background:white;border-color:var(--line);color:var(--ink)}
+button.secondary:hover{background:var(--soft)}
+.hero .button{background:white;color:#123c30}
+.hero .button:hover{background:var(--soft)}
+button:disabled{opacity:.6;cursor:wait}
+:focus-visible{outline:2px solid #267d61;outline-offset:3px}
+.hero :focus-visible{outline-color:#c7e4d9}
+.hint{margin:16px 0 0;color:var(--muted);font-size:.875rem}
+#loginPanel{max-width:460px;margin:clamp(24px,8vw,90px) auto 0}
+#loginPanel .controls{grid-template-columns:1fr}
+#loginPanel button{width:100%}
+#history{padding:0;margin:0;list-style:none}
+#history li{padding:12px 0;border-top:1px solid var(--line);font-weight:650}
+#history li small{display:block;margin-top:3px;color:var(--muted);font-size:.875rem;font-weight:400}
+[hidden]{display:none!important}
+@media(max-width:800px){#dashboard{grid-template-columns:168px minmax(0,1fr);gap:16px}.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:620px){main{padding:0 14px 28px}.topbar{min-height:68px}#dashboard{grid-template-columns:minmax(0,1fr);margin-top:16px}.sidebar{grid-template-columns:repeat(2,minmax(0,1fr));top:0;z-index:1}.card{padding:16px}.grid > div{padding:12px}h2{font-size:1.45rem}}
+@media(max-width:390px){.controls{grid-template-columns:1fr}}
 </style>
 <main>
-<header><h1>Budget Together</h1><button id="logout" class="secondary" hidden>Sign out</button></header>
+<header class="topbar"><div class="brand"><span class="mark" aria-hidden="true">₱</span><h1>Budget Together</h1></div><button id="logout" class="secondary" hidden>Sign out</button></header>
 <p id="status" role="status" hidden></p>
-<section id="loginPanel" hidden>
-<h2>Household sign-in</h2>
+<section class="card" id="loginPanel" hidden>
+<h2 class="panel-head">Sign in</h2>
 <form id="login"><div class="controls"><label>Email<input type="email" name="email" autocomplete="username" required></label><label>Password<input type="password" name="password" autocomplete="current-password" required></label></div><button>Sign in</button></form>
 </section>
 <div id="dashboard" hidden>
@@ -22,8 +73,12 @@
 <a href="#history" data-view="history">History</a>
 </nav>
 <div class="views">
-<section class="hero" data-panel="overview"><h2>Available until next cutoff</h2><output id="available" class="balance"></output><div id="summary" class="grid"></div></section>
-<section data-panel="plan" hidden><h2>Cutoff plan</h2>
+<section data-panel="overview">
+<h2 class="panel-head">Overview</h2>
+<div class="hero"><div><p id="balanceLabel" class="hero-label">Available until next cutoff</p><output id="available" class="balance" aria-labelledby="balanceLabel"></output></div><a href="#add" class="button">Add transaction</a></div>
+<div id="summary" class="grid"></div>
+</section>
+<section class="card" data-panel="plan" hidden><h2 class="panel-head">Cutoff plan</h2>
 <form id="plan"><div class="controls">
 <label>Cutoff starts<input type="date" name="start_date" required></label>
 <label>Next cutoff<input type="date" name="next_date" required></label>
@@ -31,21 +86,25 @@
 <label>Unpaid bills to reserve (₱)<input type="number" name="bills" min="0" step="0.01" required></label>
 <label>Piggy bank target (₱)<input type="number" name="target" min="0" step="0.01" required></label>
 </div><button>Save plan</button></form>
-<p>Enter cash at the start of the period. When paying a reserved bill, log it as a bill payment. A new cutoff can start from the cash you actually have.</p>
+<p class="hint">Enter cash at the start of the period. When paying a reserved bill, log it as a bill payment. A new cutoff can start from the cash you actually have.</p>
 </section>
-<section data-panel="add" hidden><h2 id="entryTitle">Add transaction</h2>
+<section class="card" data-panel="add" hidden><h2 class="panel-head" id="entryTitle">Add transaction</h2>
 <form id="entry"><div class="controls">
-<label>Amount (₱)<input type="number" name="amount" min="0.01" step="0.01" required></label>
+<label>Amount (₱)<input type="number" name="amount" inputmode="decimal" min="0.01" step="0.01" required></label>
 <label>Type<select name="kind"><option value="expense">Cash expense</option><option value="income">Income</option><option value="bill">Bill payment</option><option value="card_charge">Card purchase</option><option value="card_payment">Card payment</option><option value="savings">Piggy bank deposit</option></select></label>
 <label>Category<select name="category"><option>Other</option><option>Transport</option><option>Lunch</option><option>Snacks</option><option>Groceries</option><option>Rent</option><option>Internet</option><option>Salary</option><option>Allowance</option><option>Credit card</option><option>Piggy bank</option></select></label>
 <label>Date<input type="date" name="entry_date" required></label>
-<label>For<select name="person"><option>Shared</option><option>Ako</option><option>Misis</option></select></label>
+<label>For<select name="person"><option>Shared</option><option value="Ako">Mr. Benj</option><option value="Misis">Mrs. Ai</option></select></label>
 </div><button id="saveEntry">Add transaction</button> <button type="button" id="cancel" class="secondary" hidden>Cancel edit</button></form>
 </section>
-<section data-panel="history" hidden><header><h2>Transactions</h2><button class="secondary" id="refresh">Refresh</button></header><p id="historyNote">Showing all saved transactions.</p><ul id="history"></ul></section>
+<section class="card" data-panel="history" hidden><header class="panel-head"><h2>Transactions</h2><div class="history-actions"><button type="button" class="secondary" id="refresh">Refresh</button><button type="button" id="downloadHistory" hidden>Download Excel</button></div></header><p class="hint" id="historyNote" hidden>No transactions yet.</p><ul id="history"></ul></section>
 </div>
 </div>
 </main>
 <script type="module" src="./app.js"></script>
 </html>
+
+
+
+
 

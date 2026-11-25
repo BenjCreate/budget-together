@@ -71,6 +71,18 @@ async function load(account, version) {
   render();
 }
 
+function sortedEntries() {
+  return [...state.entries].sort((a, b) => b.entry_date.localeCompare(a.entry_date));
+}
+
+const transactionTypes = new Map(
+  [...entryForm.elements.kind.options].map(({ value, textContent }) => [value, textContent])
+);
+
+const personLabels = new Map(
+  [...entryForm.elements.person.options].map(({ value, textContent }) => [value, textContent])
+);
+
 function render() {
   for (const [key, value] of Object.entries(state.plan)) {
     const field = planForm.elements.namedItem(key);
@@ -94,14 +106,16 @@ function render() {
   }
   const history = get("history");
   history.replaceChildren();
-  for (const entry of [...state.entries].sort((a, b) => b.entry_date.localeCompare(a.entry_date))) {
+  get("historyNote").hidden = state.entries.length > 0;
+  get("downloadHistory").hidden = state.entries.length === 0;
+  for (const entry of sortedEntries()) {
     const item = document.createElement("li");
     item.className = "row";
     const text = document.createElement("div");
     const detail = document.createElement("small");
     text.textContent = money(entry.amount) + " · " + entry.category;
-    const type = [...entryForm.elements.kind.options].find((option) => option.value === entry.kind).textContent;
-    detail.textContent = entry.entry_date + " · " + type + " · " + entry.person;
+    const type = transactionTypes.get(entry.kind);
+    detail.textContent = entry.entry_date + " · " + type + " · " + personLabels.get(entry.person);
     text.append(detail);
     const edit = document.createElement("button");
     edit.type = "button";
@@ -174,6 +188,30 @@ action(entryForm, "submit", async () => {
   message("Transaction saved.");
 });
 
+action(get("downloadHistory"), "click", async () => {
+  const version = authVersion;
+  const { utils, writeFileXLSX } = await import("https://cdn.sheetjs.com/xlsx-0.20.3/package/xlsx.mjs");
+  await load(owner, version);
+  if (version !== authVersion) return;
+  const entries = sortedEntries();
+  if (!entries.length) {
+    message("No transactions to export yet.");
+    return;
+  }
+  const rows = entries.map((entry) => [
+    entry.entry_date, transactionTypes.get(entry.kind), entry.category,
+    personLabels.get(entry.person), Number(entry.amount) / 100
+  ]);
+  const worksheet = utils.aoa_to_sheet([["Date", "Type", "Category", "For", "Amount (PHP)"], ...rows]);
+  worksheet["!cols"] = [14, 24, 18, 14, 16].map((wch) => ({ wch }));
+  worksheet["!autofilter"] = { ref: worksheet["!ref"] };
+  for (let row = 2; row <= rows.length + 1; row += 1) worksheet["E" + row].z = "#,##0.00";
+  const workbook = utils.book_new();
+  utils.book_append_sheet(workbook, worksheet, "Transactions");
+  writeFileXLSX(workbook, "budget-history-" + localDate() + ".xlsx", { compression: true });
+  message("Excel download started.");
+});
+
 get("cancel").onclick = resetEntry;
 action(get("refresh"), "click", async () => {
   await load(owner, authVersion);
@@ -220,6 +258,9 @@ async function start() {
 }
 
 start().catch((error) => message(error.message));
+
+
+
 
 
 
