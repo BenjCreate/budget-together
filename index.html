@@ -7,7 +7,7 @@
 <style>
 :root{color-scheme:light;--ink:#172a27;--muted:#50645f;--line:#dce6e1;--accent:#1d674f;--soft:#e6f1eb;--surface:#fff}
 *{box-sizing:border-box}
-body{margin:0;background:#f4f7f5;color:var(--ink);font:1rem/1.5 system-ui,sans-serif}
+body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 86% 0%,#dcefe4 0%,transparent 56%),linear-gradient(170deg,#edf6f0 0%,#f6f8f7 75%);color:var(--ink);font:1rem/1.5 system-ui,sans-serif}
 main{max-width:1200px;margin:auto;padding:0 28px 48px}
 .topbar,.row,.panel-head,.hero{display:flex;align-items:center;justify-content:space-between;gap:16px}
 .topbar{min-height:86px;border-bottom:1px solid var(--line)}
@@ -24,7 +24,9 @@ h2{font-size:1.75rem;letter-spacing:-.045em;line-height:1.2}
 .views{min-width:0}
 .panel-head{margin-bottom:18px;flex-wrap:wrap}.history-actions{display:flex;gap:8px;flex-wrap:wrap}
 .card{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:24px}
-.hero{align-items:flex-end;flex-wrap:wrap;background:linear-gradient(120deg,#112f28,#1a4b3c);border-radius:18px;padding:clamp(20px,4vw,34px);color:#fff}
+.hero{position:relative;isolation:isolate;overflow:hidden;align-items:flex-end;flex-wrap:wrap;background:linear-gradient(120deg,#112f28,#1a4b3c);border-radius:18px;padding:clamp(20px,4vw,34px);color:#fff}
+.hero::before,.hero::after{content:"";position:absolute;z-index:-1;right:-78px;bottom:-168px;width:340px;height:340px;border:1px solid #c7e4d940;border-radius:50%;pointer-events:none}
+.hero::after{right:-107px;bottom:-196px;width:400px;height:400px}
 .hero-label{color:#c7e4d9;font-weight:600}
 .balance{display:block;margin-top:8px;font-size:clamp(1.9rem,5.5vw,4rem);font-weight:700;letter-spacing:-.055em;line-height:1.12;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
 .hero > div{min-width:0;max-width:100%}
@@ -57,6 +59,42 @@ button:disabled{opacity:.6;cursor:wait}
 @media(max-width:800px){#dashboard{grid-template-columns:168px minmax(0,1fr);gap:16px}.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:620px){main{padding:0 14px 28px}.topbar{min-height:68px}#dashboard{grid-template-columns:minmax(0,1fr);margin-top:16px}.sidebar{grid-template-columns:repeat(2,minmax(0,1fr));top:0;z-index:1}.card{padding:16px}.grid > div{padding:12px}h2{font-size:1.45rem}}
 @media(max-width:390px){.controls{grid-template-columns:1fr}}
+.calculator{width:min(360px,calc(100% - 24px));max-height:calc(100% - 24px);padding:18px;border:1px solid #414141;border-radius:24px;background:#191919;color:white}
+.calculator::backdrop{background:#000000b3}
+.calculator .panel-head{margin-bottom:12px}
+.calculator h2{font-size:1.2rem}
+.calculator-output{display:block;min-height:64px;padding:8px 12px;margin-bottom:12px;background:#101010;border-radius:12px;text-align:right;overflow-wrap:anywhere;font-size:clamp(1.7rem,7vw,2.5rem);font-variant-numeric:tabular-nums}
+.calculator-keys{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px}
+.calculator-keys button{border-radius:22px;background:#343434;font-size:1.15rem}
+.calculator-keys button:hover{background:#474747}
+.calculator-keys .operator{background:#ff9a3c;color:#231504}
+.calculator-keys .operator:hover{background:#ffb367}
+.calculator-zero{grid-column:span 2}
+.calculator-footer{width:100%;margin-top:12px;background:#ff9a3c;color:#231504}
+.calculator-footer:hover{background:#ffb367}
+.calculator :focus-visible{outline-color:#ff9a3c}
+#loginPanel{position:relative;z-index:1;box-shadow:0 16px 44px #153f3110}
+.savings-watermark{display:none;position:fixed;inset:0;overflow:hidden;pointer-events:none;color:#246e54}
+#loginPanel:not([hidden]) + .savings-watermark{display:block}
+.savings-orbit{position:absolute;right:-8rem;bottom:-20rem;width:clamp(36rem,73vw,72rem);aspect-ratio:1;border:1px solid currentColor;border-radius:50%;opacity:.13}
+.savings-orbit::before,.savings-orbit::after{content:"";position:absolute;inset:8%;border:inherit;border-radius:inherit}
+.savings-orbit::after{inset:16%}
+.savings-coin{position:absolute;display:grid;place-items:center;aspect-ratio:1;border:2px solid currentColor;border-radius:50%;font-weight:650;line-height:1;opacity:.13}
+.savings-coin::before{content:"";position:absolute;inset:9%;border:1px solid currentColor;border-radius:inherit}
+.savings-coin-large{right:5%;bottom:10%;width:clamp(110px,21vw,270px);font-size:clamp(3rem,10vw,8rem);transform:rotate(-15deg)}
+.savings-coin-small{left:7%;top:25%;width:clamp(66px,10vw,145px);font-size:clamp(1.8rem,4.5vw,4rem);transform:rotate(17deg);opacity:.085}
+@media(max-width:620px){.savings-orbit{right:-16rem;bottom:-19rem}.savings-coin-large{right:8%;bottom:6%}.savings-coin-small{display:none}}
+.savings-growth{position:absolute;right:clamp(20px,9vw,155px);bottom:clamp(24px,7vh,90px);display:flex;align-items:end;gap:8px;color:#27694f;opacity:.24;transform:rotate(-4deg)}
+.coin-stack{position:relative;display:block;width:clamp(30px,5vw,66px);border:1px solid currentColor;border-radius:50% / 12px;background:repeating-linear-gradient(to top,#4083621f 0 5px,#27694f88 5px 6px,#4083621f 6px 8px)}
+.coin-stack::after{content:"";position:absolute;inset:-1px -1px auto;height:19px;border:1px solid currentColor;border-radius:50%;background:#b9dfc6}
+.coin-stack-low{height:34px}.coin-stack-mid{height:62px}.coin-stack-high{height:105px}
+.savings-sprout{position:absolute;z-index:1;left:50%;bottom:calc(100% - 10px);width:2px;height:66px;border-radius:3px;background:currentColor;transform:rotate(-7deg);transform-origin:bottom}
+.savings-sprout::before,.savings-sprout::after{content:"";position:absolute;width:29px;height:14px;background:#44916b;border:1px solid currentColor}
+.savings-sprout::before{right:1px;top:22px;border-radius:90% 0 90% 0;transform:rotate(25deg)}
+.savings-sprout::after{left:1px;top:3px;border-radius:0 90% 0 90%;transform:rotate(-32deg)}
+.coin-stack-mid .savings-sprout{transform:rotate(8deg) scale(.72)}
+.savings-coin-large{right:4%;bottom:26%;width:clamp(84px,15vw,190px);font-size:clamp(2rem,6.5vw,5.5rem);opacity:.095}
+@media(max-width:620px){.savings-growth{right:18px;bottom:22px;transform:scale(.76) rotate(-4deg);transform-origin:bottom right}.savings-coin-large{bottom:16%;right:7%}}
 </style>
 <main>
 <header class="topbar"><div class="brand"><span class="mark" aria-hidden="true">₱</span><h1>Budget Together</h1></div><button id="logout" class="secondary" hidden>Sign out</button></header>
@@ -65,6 +103,16 @@ button:disabled{opacity:.6;cursor:wait}
 <h2 class="panel-head">Sign in</h2>
 <form id="login"><div class="controls"><label>Email<input type="email" name="email" autocomplete="username" required></label><label>Password<input type="password" name="password" autocomplete="current-password" required></label></div><button>Sign in</button></form>
 </section>
+<div class="savings-watermark" aria-hidden="true">
+<span class="savings-orbit"></span>
+<span class="savings-coin savings-coin-small">&#8369;</span>
+<span class="savings-coin savings-coin-large">&#8369;</span>
+<div class="savings-growth">
+<span class="coin-stack coin-stack-low"></span>
+<span class="coin-stack coin-stack-mid"><span class="savings-sprout"></span></span>
+<span class="coin-stack coin-stack-high"><span class="savings-sprout"></span></span>
+</div>
+</div>
 <div id="dashboard" hidden>
 <nav class="sidebar" aria-label="Budget navigation">
 <a href="#overview" data-view="overview" aria-current="page">Overview</a>
@@ -88,7 +136,7 @@ button:disabled{opacity:.6;cursor:wait}
 </div><button>Save plan</button></form>
 <p class="hint">Enter cash at the start of the period. When paying a reserved bill, log it as a bill payment. A new cutoff can start from the cash you actually have.</p>
 </section>
-<section class="card" data-panel="add" hidden><h2 class="panel-head" id="entryTitle">Add transaction</h2>
+<section class="card" data-panel="add" hidden><header class="panel-head"><h2 id="entryTitle">Add transaction</h2><button type="button" id="openCalculator" class="secondary" aria-haspopup="dialog">Calculator</button></header>
 <form id="entry"><div class="controls">
 <label>Amount (₱)<input type="number" name="amount" inputmode="decimal" min="0.01" step="0.01" required></label>
 <label>Type<select name="kind"><option value="expense">Cash expense</option><option value="income">Income</option><option value="bill">Bill payment</option><option value="card_charge">Card purchase</option><option value="card_payment">Card payment</option><option value="savings">Piggy bank deposit</option></select></label>
@@ -100,9 +148,26 @@ button:disabled{opacity:.6;cursor:wait}
 <section class="card" data-panel="history" hidden><header class="panel-head"><h2>Transactions</h2><div class="history-actions"><button type="button" class="secondary" id="refresh">Refresh</button><button type="button" id="downloadHistory" hidden>Download Excel</button></div></header><p class="hint" id="historyNote" hidden>No transactions yet.</p><ul id="history"></ul></section>
 </div>
 </div>
+<dialog id="calculator" class="calculator" aria-labelledby="calculatorTitle">
+<header class="panel-head"><h2 id="calculatorTitle">Calculator</h2><form method="dialog"><button class="secondary">Close</button></form></header>
+<output id="calculatorOutput" class="calculator-output" aria-label="Result">0</output>
+<div id="calculatorKeys" class="calculator-keys">
+<button data-key="AC">AC</button><button data-key="backspace" aria-label="Backspace">⌫</button><button data-key="%" aria-label="Percent">%</button><button class="operator" data-key="/" aria-label="Divide">÷</button>
+<button data-key="7">7</button><button data-key="8">8</button><button data-key="9">9</button><button class="operator" data-key="*" aria-label="Multiply">×</button>
+<button data-key="4">4</button><button data-key="5">5</button><button data-key="6">6</button><button class="operator" data-key="-" aria-label="Subtract">−</button>
+<button data-key="1">1</button><button data-key="2">2</button><button data-key="3">3</button><button class="operator" data-key="+" aria-label="Add">+</button>
+<button class="calculator-zero" data-key="0">0</button><button data-key="." aria-label="Decimal point">.</button><button class="operator" data-key="=" aria-label="Equals">=</button>
+</div>
+<button type="button" id="useCalculatorAmount" class="calculator-footer">Use amount</button>
+</dialog>
 </main>
 <script type="module" src="./app.js"></script>
 </html>
+
+
+
+
+
 
 
 

@@ -212,6 +212,88 @@ action(get("downloadHistory"), "click", async () => {
   message("Excel download started.");
 });
 
+const calculator = get("calculator");
+const transactionAmount = entryForm.elements.amount;
+const operations = {
+  "+": (a, b) => a + b,
+  "-": (a, b) => a - b,
+  "*": (a, b) => a * b,
+  "/": (a, b) => a / b
+};
+let display = "0";
+let operand = 0;
+let operator = null;
+let replaceDisplay = false;
+
+function displayNumber(value) {
+  return Number.isFinite(value) ? String(Number(value.toPrecision(12))) : "Error";
+}
+
+function updateCalculator() {
+  get("calculatorOutput").textContent = display;
+  const current = Number(display);
+  const result = operator && !replaceDisplay ? Number(displayNumber(operations[operator](operand, current))) : current;
+  const amount = Math.round(result * 100);
+  get("useCalculatorAmount").disabled = !Number.isFinite(amount) || amount < 1 || amount > 10000000000;
+}
+
+function calculateKey(key) {
+  if (key === "AC") {
+    display = "0";
+    operator = null;
+    replaceDisplay = false;
+  } else if (/^[0-9.]$/.test(key)) {
+    if (replaceDisplay || display === "Error") display = "0";
+    replaceDisplay = false;
+    if (key === "." && !display.includes(".")) display += ".";
+    else if (key !== "." && display.length < 14) display = display === "0" ? key : display + key;
+  } else if (key === "backspace") {
+    if (!replaceDisplay && display !== "Error") display = display.slice(0, -1) || "0";
+    if (display === "-") display = "0";
+  } else if (key === "%") {
+    if (display !== "Error") {
+      display = displayNumber(Number(display) / 100);
+      replaceDisplay = false;
+    }
+  } else if (key === "=" || Object.hasOwn(operations, key)) {
+    if (operator && !replaceDisplay) display = displayNumber(operations[operator](operand, Number(display)));
+    operator = key === "=" || display === "Error" ? null : key;
+    operand = Number(display);
+    replaceDisplay = true;
+  }
+  updateCalculator();
+}
+
+get("openCalculator").onclick = () => {
+  calculateKey("AC");
+  display = transactionAmount.value || "0";
+  replaceDisplay = true;
+  updateCalculator();
+  calculator.showModal();
+};
+
+get("calculatorKeys").onclick = (event) => {
+  const button = event.target.closest("[data-key]");
+  if (button) calculateKey(button.dataset.key);
+};
+
+calculator.addEventListener("keydown", (event) => {
+  if (event.altKey || event.ctrlKey || event.metaKey) return;
+  const key = event.key === "Backspace" ? "backspace" : event.key === "Delete" ? "AC" : event.key;
+  if (/^[0-9.]$/.test(key) || Object.hasOwn(operations, key) || ["=", "%", "backspace", "AC"].includes(key)) {
+    event.preventDefault();
+    calculateKey(key);
+  }
+});
+
+get("useCalculatorAmount").onclick = () => {
+  if (operator && !replaceDisplay) calculateKey("=");
+  if (get("useCalculatorAmount").disabled) return;
+  transactionAmount.value = (Math.round(Number(display) * 100) / 100).toFixed(2);
+  calculator.close();
+  transactionAmount.focus();
+};
+
 get("cancel").onclick = resetEntry;
 action(get("refresh"), "click", async () => {
   await load(owner, authVersion);
@@ -258,6 +340,8 @@ async function start() {
 }
 
 start().catch((error) => message(error.message));
+
+
 
 
 
